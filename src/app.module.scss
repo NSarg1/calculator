@@ -7,7 +7,6 @@
     .calculator {
         height: 80%;
         width: 400px;
-        background-color: red;
         display: flex;
         flex-direction: column;
 
@@ -15,7 +14,8 @@
             flex: 0.2 0;
             background-color: green;
             display: flex;
-            justify-content: flex-end;
+            flex-direction: column;
+            justify-content: space-between;
             align-items: flex-end;
             padding: 10px;
             font-size: 30px;
