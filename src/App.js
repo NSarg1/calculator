@@ -17,6 +17,7 @@ function App() {
 
     const handleReset = () => {
         setCurrentVal(INITIAL_RESULT_STATE);
+        setResult(INITIAL_RESULT_STATE);
         setOperatorState("");
     };
 
