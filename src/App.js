@@ -7,46 +7,49 @@ function App() {
     const [result, setResult] = useState(INITIAL_RESULT_STATE);
     const [currentVal, setCurrentVal] = useState(INITIAL_RESULT_STATE);
 
-    const [operatorState, setOperatorState] = useState("");
-
     const handleNumClick = (num) => {
-        if (currentVal === "0" || operatorState) setCurrentVal(num);
+        if (currentVal === "0") setCurrentVal(num);
         else setCurrentVal(currentVal + num);
-        setOperatorState("");
+    };
+
+    const isNumber = () => {
+        const lastChar = currentVal.split("").pop();
+        return !isNaN(lastChar);
     };
 
     const handleReset = () => {
-        setCurrentVal(INITIAL_RESULT_STATE);
-        setResult(INITIAL_RESULT_STATE);
-        setOperatorState("");
+        setResult(0);
+        setCurrentVal(0);
     };
 
-    const handleDelete = () => {
-        const newString = currentVal.slice(0, -1);
-        if (newString === "") setCurrentVal(INITIAL_RESULT_STATE);
-        else setCurrentVal(newString);
-    };
+    const handleDelete = () => {};
 
     const handleOperatorClick = (operator) => {
-        setOperatorState(operator);
-        if (operator === "+") {
-            const num = Number(result) + Number(currentVal);
-            setResult(num);
-            setCurrentVal(`${num}`);
+        const isNum = isNumber();
+
+        if (isNum) setCurrentVal(currentVal + operator);
+        else {
+            let newString = currentVal.slice(0, -1);
+            newString += operator;
+            setCurrentVal(newString);
         }
     };
 
     const handleEqual = () => {
-        // handleOperation(operatorState);
+        const isNum = isNumber();
+
+        if (isNum) {
+            const validStr = currentVal.replace("%", "/ 100 *");
+            setResult(eval(validStr));
+        }
     };
 
-    console.log(result);
     return (
         <div className={styles.container}>
             <div className={styles.calculator}>
                 <div className={styles.result}>
-                    <div>{operatorState}</div>
-                    <div>{currentVal}</div>
+                    <div className={styles.currentVal}>{currentVal}</div>
+                    <div>{result}</div>
                 </div>
                 <div className={styles.buttons}>
                     <ul className={styles.row}>
@@ -59,7 +62,9 @@ function App() {
                         <li className={styles.column} onClick={() => handleOperatorClick("%")}>
                             %
                         </li>
-                        <li className={styles.column}>/</li>
+                        <li className={styles.column} onClick={() => handleOperatorClick("/")}>
+                            /
+                        </li>
                     </ul>
                     <ul className={styles.row}>
                         <li className={styles.column} onClick={() => handleNumClick("7")}>
@@ -107,10 +112,13 @@ function App() {
                         <li
                             className={styles.column}
                             style={{ flex: "2 0" }}
-                            onClick={() => handleNumClick("0")}>
+                            onClick={() => handleNumClick("0")}
+                        >
                             0
                         </li>
-                        <li className={styles.column}>.</li>
+                        <li className={styles.column} onClick={() => handleOperatorClick(".")}>
+                            .
+                        </li>
                         <li className={styles.column} onClick={handleEqual}>
                             =
                         </li>
